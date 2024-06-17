@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\General;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProfileRequest;
 use App\Http\Response;
 use App\Models\Profile;
 use App\Services\ResponseService;
@@ -13,7 +14,7 @@ class ProfileController extends Controller
     protected $responseService;
     public function __construct(ResponseService $responseService)
     {
-        $this->middleware('auth.role');
+        $this->middleware('auth.role:user');
         $this->responseService = $responseService;
     }
     /**
@@ -29,8 +30,20 @@ class ProfileController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProfileRequest $request , Profile $profile)
     {
+        $data = $request->validated();
+         $filteredData = filter_empty_values($data);
+
+        $addProfile = $profile->updateOrCreate(
+            [
+                'user_id' => $data['user_id'],
+            ],
+            $filteredData
+        );
+
+        return $addProfile ? $this->responseService->success($addProfile, 'Profile Updated') :
+                        $this->responseService->error('Error updating Profile', Response::HTTP_BAD_REQUEST);
 
     }
 

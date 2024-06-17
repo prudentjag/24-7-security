@@ -3,6 +3,7 @@
 use App\Http\Controllers\auth\LoginController;
 use App\Http\Controllers\auth\RegistrationController;
 use App\Http\Controllers\auth\VerifyotpController;
+use App\Http\Controllers\General\ProfileController;
 use App\Http\Controllers\testAPis;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('resendotp', [VerifyotpController::class, 'ResendOtp']);
     Route::post('verifyotp', [VerifyotpController::class, 'VerifyOtp']);
 });
+Route::resource('profile', ProfileController::class);
 
 
 
