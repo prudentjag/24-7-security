@@ -24,7 +24,7 @@ class VerifyotpController extends Controller
 
     public function VerifyOtp(OtpVerify $request) {
         $data = $request->validated();
-        $otp = Otp::where('user_id', $data['user_id'])->first();
+        $otp = Otp::where('user_id', $data['user_id'])->first(); //Get the user id
         if (!$otp) {
             return $this->responseService->error('Invalid user ID or OTP not found.', Response::HTTP_BAD_REQUEST);
         }
@@ -55,7 +55,7 @@ class VerifyotpController extends Controller
             ]);
 
             if($otp) {
-               return $this->responseService->success($otp, 'Check sms for OTP');
+               return $this->responseService->success($otp, 'An OTP has been sent to your SMS');
             }
         }
     }

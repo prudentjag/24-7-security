@@ -29,13 +29,13 @@ class LoginController extends Controller
             return $this->responseService->error('Invalid login details', Response::HTTP_UNAUTHORIZED);
         }
 
-        $payload = JWTAuth::getPayload($token);
+        $user = JWTAuth::user();
 
         return response()->json([
-            'user' => $payload,
+            'message' => 'Login Successful',
+            'user' => $user,
             'token' => $token,
             'status' => true,
-            'message' => 'Login Successful'
         ]);
     }
 

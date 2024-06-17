@@ -4,13 +4,15 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use libphonenumber\PhoneNumberUtil;
 use libphonenumber\PhoneNumberFormat;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -50,6 +52,26 @@ class User extends Authenticatable
     ];
 
      /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
+     /**
      * Convert phone number to international format.
      *
      * @param string $phone
@@ -59,11 +81,21 @@ class User extends Authenticatable
     {
         try {
             $phoneUtil = PhoneNumberUtil::getInstance();
-            $parsedNumber = $phoneUtil->parse($phone, 'NG'); // 'NG' for Nigeria, adjust based on your requirement
+            $parsedNumber = $phoneUtil->parse($phone, 'NG');
             $formattedNumber = $phoneUtil->format($parsedNumber, PhoneNumberFormat::E164);
             return str_replace('+', '', $formattedNumber);
         } catch (\libphonenumber\NumberParseException $e) {
-            return null; // Handle the exception as per your needs
+            return null;
         }
+    }
+
+    /**
+     * Get the user associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function user(): HasOne
+    {
+        return $this->hasOne(Profile::class, 'user_id');
     }
 }

@@ -21,12 +21,10 @@ class RegistrationController extends Controller
     public function __construct(
         SmsService $smsService,
         ResponseService $responseService,
-        PhoneNumberService $phoneNumberService
         )
     {
         $this->smsService = $smsService;
         $this->responseService = $responseService;
-        $this->phoneNumberService = $phoneNumberService;
     }
 
     public function register(Registration $request)
@@ -37,7 +35,7 @@ class RegistrationController extends Controller
             'middle_name' => $data['middle_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
-            'phone' => $this->phoneNumberService->convertToInternationalFormat($data['phone']),
+            'phone' => User::convertToInternationalFormat($data['phone']),
             'role' => $data['role'] ?? 'user',
             'password' => Hash::make($data['password']),
         ]);
@@ -61,6 +59,6 @@ class RegistrationController extends Controller
             return $otp;
         }
 
-        return null; // Ensure null is returned in case of failure
+        return null;
     }
 }
