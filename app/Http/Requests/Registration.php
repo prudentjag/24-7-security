@@ -26,7 +26,7 @@ class Registration extends FormRequest
             'middle_name'=>'required|string',
             'last_name'=>'required|string',
             'email'=>'required|string|email|unique:users',
-            'password'=>'required|min:8',
+            'password'=>'sometimes|min:8',
             'phone' => 'required|min:7|unique:users,phone',
             // 'subscription' => 'in:Basics,Premuim,Gold,Hyper',
             'role' => 'required',
@@ -42,7 +42,6 @@ class Registration extends FormRequest
             'email.required' => 'The email field is required.',
             'email.email' => 'Please enter a valid email address.',
             'email.unique' => 'The email has already been taken.',
-            'password.required' => 'The password field is required.',
             'password.min' => 'The password must be at least :min characters.',
             'role.required' => 'Assign a role '
         ];

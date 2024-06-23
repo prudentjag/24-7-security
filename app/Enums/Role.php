@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum Roles :string {
+enum Role :string {
     case user = 'user';
     case landlord = 'landlord';
     case ceo = 'ceo';

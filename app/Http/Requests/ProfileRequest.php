@@ -25,8 +25,8 @@ class ProfileRequest extends FormRequest
             'dob' => 'required|date',
             'address' => 'required|string',
             'gender' => 'required|in:male,female',
-            'nin' => 'required|integer|min:10|max:10',
-            'avatar' => 'image', // Assuming avatar is an image file
+            'nin' => 'required|digits:11',
+            'avatar' => 'image', 
             'plate_number' => 'required|string',
             'user_id' => 'required|exists:users,id'
         ];
@@ -43,8 +43,7 @@ class ProfileRequest extends FormRequest
             'gender.in' => 'Gender must be either male or female',
             'nin.required' => 'NIN is required',
             'nin.integer' => 'NIN must be in Numeric form',
-            'nin.max' => 'Nin cannot be more than 10 digits',
-            'nin.min' => 'NIN cannot be less than 10 digits',
+            'nin.digits' => 'Nin cannot be more than 11 digits',
             'avatar.image' => 'Avatar must be an image file',
             'plate_number.required' => 'Plate number is required',
             'plate_number.string' => 'Plate number must be a string',

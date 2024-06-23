@@ -28,7 +28,12 @@ class VerifyotpController extends Controller
         if (!$otp) {
             return $this->responseService->error('Invalid user ID or OTP not found.', Response::HTTP_BAD_REQUEST);
         }
-        $verify = $this->smsService->VerifyOtp( $otp->pin_id, $data['token'],);
+        // check if its email or sms otp
+        if($otp->pin_id){
+            $verify = $this->smsService->VerifyOtp( $otp->pin_id, $data['token'],);
+        }else{
+
+        }
          if ($verify['verified'] == "True") {
             $otp->delete();
             return $this->responseService->success(null, 'OTP verified successfully.');
@@ -59,4 +64,9 @@ class VerifyotpController extends Controller
             }
         }
     }
+
+    public function emailtoken(Request $request) {
+        $user = User::where('email', $request->email)->first();
+    }
+
 }

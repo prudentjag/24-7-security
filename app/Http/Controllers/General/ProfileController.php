@@ -7,6 +7,7 @@ use App\Http\Requests\ProfileRequest;
 use App\Http\Response;
 use App\Models\Profile;
 use App\Services\ResponseService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
@@ -33,8 +34,7 @@ class ProfileController extends Controller
     public function store(ProfileRequest $request , Profile $profile)
     {
         $data = $request->validated();
-         $filteredData = filter_empty_values($data);
-
+        $filteredData = filter_empty_values($data); // Removes the empty the empty keys from array
         $addProfile = $profile->updateOrCreate(
             [
                 'user_id' => $data['user_id'],

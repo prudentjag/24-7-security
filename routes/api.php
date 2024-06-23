@@ -30,10 +30,12 @@ Route::post('otpsender', [testAPis::class, 'Otp']);  // Test that otpis sending
 
 Route::group(['prefix' => 'auth'], function () {
     Route::post('register', [RegistrationController::class, 'register']);
+    Route::get('lregister', [RegistrationController::class, 'LandlordRegistration']);
     Route::post('login', [LoginController::class, 'login']);
     Route::get('resendotp', [VerifyotpController::class, 'ResendOtp']);
     Route::post('verifyotp', [VerifyotpController::class, 'VerifyOtp']);
 });
+Route::get('password/password-reset/{token}', []);
 Route::resource('profile', ProfileController::class);
 
 
