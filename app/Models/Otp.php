@@ -12,7 +12,9 @@ class Otp extends Model
 
     protected $fillable = [
         'user_id',
-        'pin_id'
+        'pin_id',
+        'email_token',
+        'expires_at'
     ];
 
     /**

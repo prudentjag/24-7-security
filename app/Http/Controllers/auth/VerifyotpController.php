@@ -11,6 +11,7 @@ use App\Services\ResponseService;
 use App\Services\SmsService;
 use Illuminate\Http\Request;
 
+
 class VerifyotpController extends Controller
 {
     protected $smsService;
@@ -28,18 +29,21 @@ class VerifyotpController extends Controller
         if (!$otp) {
             return $this->responseService->error('Invalid user ID or OTP not found.', Response::HTTP_BAD_REQUEST);
         }
+        //dd($data['token']);
         // check if its email or sms otp
-        if($otp->pin_id){
-            $verify = $this->smsService->VerifyOtp( $otp->pin_id, $data['token'],);
+        if ($data['token'] == $otp->email_token) {
+            $responseData = $this->smsService->Verifyemail($data['token']);
+             $verify = $responseData->getData(true);
         }else{
-
+            $verify = $this->smsService->VerifyOtp( $otp->pin_id, $data['token'],);
         }
-         if ($verify['verified'] == "True") {
+
+        if ($verify['verified'] == "True") {
             $otp->delete();
             return $this->responseService->success(null, 'OTP verified successfully.');
         } else {
             $otp->delete();
-            return $this->responseService->error($verify['verified'], Response::HTTP_BAD_REQUEST);
+            return $this->responseService->error('Token has expired', Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -67,6 +71,7 @@ class VerifyotpController extends Controller
 
     public function emailtoken(Request $request) {
         $user = User::where('email', $request->email)->first();
+
     }
 
 }

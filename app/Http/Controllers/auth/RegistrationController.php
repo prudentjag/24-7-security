@@ -11,6 +11,7 @@ use App\Services\ResponseService;
 use App\Services\SmsService;
 use Illuminate\Support\Facades\Hash;
 use App\Services\MailServices;
+use Carbon\Carbon;
 
 class RegistrationController extends Controller
 {
@@ -44,7 +45,16 @@ class RegistrationController extends Controller
         ]);
 
         $otp = $this->sendOtp($data['phone'], $user->id);
-        if ($otp) {
+
+        // Generate email token
+        $emailToken = generate_tokens(100000, 999999, 'otps', 'email_token');
+        $emailData = array_merge(['otp' => $emailToken], $data);
+        $storemailtoken = $this->saveMailToken($emailToken, $user->id);
+
+        // Send OTP email
+        $mail = $this->mailServices->Mailer($emailData, \App\Mail\Otpmail::class);
+
+        if ($otp ) {
             return $this->responseService->success($otp, 'Check SMS for OTP and complete your profile');
         } else {
             return $this->responseService->error('Failed to send OTP', Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -58,11 +68,24 @@ class RegistrationController extends Controller
             $otp = Otp::create([
                 'pin_id' => $sms['pinId'],
                 'user_id' => $userId,
+                'expires_at' => Carbon::now()->addMinutes(10)
             ]);
             return $otp;
         }
 
         return null;
+    }
+
+    private function saveMailToken($pin, $userId){
+        $otp = Otp::updateOrCreate(['user_id' => $userId],[
+                'email_token' => $pin,
+                'user_id' => $userId,
+            ]);
+
+            if (!$otp) {
+                return false;
+            }
+            return $otp;
     }
 
 

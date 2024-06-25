@@ -4,8 +4,10 @@ namespace App\Services;
 
 use App\Http\Response;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\JsonResponse;
 
 /**
  * Class TransactionsChecker.
@@ -63,6 +65,27 @@ class SmsService
 
         //dd($response->json());
         return $response->json();
+    }
+
+    public function Verifyemail($token) {
+        $checkpin = DB::table('otps')
+            ->where('email_token', $token)
+            ->where('expires_at', '>', Carbon::now())
+            ->first();
+            
+        if ($checkpin) {
+            $data = [
+                'verified' => True,
+                'token' => $checkpin->email_token,
+            ];
+        } else {
+            $data = [
+                'verified' => false,
+                'message' => 'Otp has expired'
+            ];
+        }
+
+        return response()->json($data);
     }
 
 }

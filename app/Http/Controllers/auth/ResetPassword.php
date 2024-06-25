@@ -35,11 +35,9 @@ class ResetPassword extends Controller
             return $this->responseService->error('User not found.', Response::HTTP_NOT_FOUND);
         }
 
-        // Update the user's password
         $user->password = Hash::make($validated['password']);
         $user->save();
 
-        // Optionally, delete the used token
         DB::table('password_reset_tokens')->where('token', $validated['token'])->delete();
 
         return $this->responseService->success($user, 'Password reset successfully.');

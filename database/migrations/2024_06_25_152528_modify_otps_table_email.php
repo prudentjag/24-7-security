@@ -12,9 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('otps', function (Blueprint $table) {
-            $table->string('email_token')->after('pin_id');
-            $table->timestamp('expires_at')->nullable()->after('user_id');
-            $table->string('pin_id')->nullable()->change();
+            $table->string('email_token')->nullable()->change();
         });
     }
 
@@ -24,9 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('otps', function (Blueprint $table) {
-            $table->dropColumn('email_token');
-            $table->dropColumn('expires_at');
-            $table->integer('pin_id')->nullable(false)->change();
+            $table->string('email_token')->nullable(false)->change();
         });
     }
 };
