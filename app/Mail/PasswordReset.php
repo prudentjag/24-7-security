@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class passwordrest extends Mailable
+class PasswordReset extends Mailable
 {
     use Queueable, SerializesModels;
     public $data;
@@ -27,7 +27,7 @@ class passwordrest extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Reset your password',
+            subject: 'Password Reset',
         );
     }
 

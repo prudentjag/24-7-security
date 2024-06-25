@@ -28,5 +28,5 @@ class units extends Model
                     ->withTimestamps();
     }
 
-    
+
 }

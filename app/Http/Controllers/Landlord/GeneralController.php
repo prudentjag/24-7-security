@@ -75,10 +75,11 @@ class GeneralController extends Controller
 
     public function PropertyUnits()
     {
+        /** @var User $user */
         $user = Auth::user();
-        $ownedProperties = $user->ownedProperties()->with('units')->get();
+        $user->load('ownedProperties.units');
 
-        $formattedProperties = $ownedProperties->map(function ($property) {
+        $formattedProperties = $user->ownedProperties->map(function ($property) {
             return [
                 'property_id' => $property->id,
                 'property_name' => $property->name,
@@ -91,6 +92,14 @@ class GeneralController extends Controller
                 }),
             ];
         });
+
+        // To seperate property and units
+        // $units = $ownedProperties->flatMap->units;
+
+        // return $this->responseService->success([
+        //     'properties' => $ownedProperties,
+        //     'units' => $units,
+        // ], 'Properties and units retrieved successfully');
 
         return $this->responseService->success([
             'properties' => $formattedProperties,

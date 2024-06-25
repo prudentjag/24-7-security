@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Mail\Otpmail;
+use App\Mail\PasswordReset;
 use Illuminate\Support\Facades\Mail;
 
 class MailServices

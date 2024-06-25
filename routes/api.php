@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\auth\LoginController;
 use App\Http\Controllers\auth\RegistrationController;
+use App\Http\Controllers\auth\ResetPassword;
 use App\Http\Controllers\auth\VerifyotpController;
 use App\Http\Controllers\General\ProfileController;
+use App\Http\Controllers\Landlord\GeneralController;
 use App\Http\Controllers\testAPis;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,8 +36,10 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('login', [LoginController::class, 'login']);
     Route::get('resendotp', [VerifyotpController::class, 'ResendOtp']);
     Route::post('verifyotp', [VerifyotpController::class, 'VerifyOtp']);
+    Route::get('resend-password', [ResetPassword::class, 'Generate_reset_Token']);
+    Route::post('reset-password', [ResetPassword::class, 'ResetPassword']);
 });
-Route::get('password/password-reset/{token}', []);
+Route::get('Properties-units', [GeneralController::class , 'PropertyUnits']);
 Route::resource('profile', ProfileController::class);
 
 
